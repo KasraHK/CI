@@ -15,9 +15,20 @@ class ExperimentRunner:
         self.results_dir = Path(results_dir)
         self.results_dir.mkdir(parents=True, exist_ok=True)
         
-    def run_single_experiment(self, func_name, algorithm, runs=20, dim=10):
+    def run_single_experiment(self, func_name, algorithm, runs=5, dim=10):
         func_info = self.benchmark.get_function(func_name)
-        bounds = self.benchmark.get_bounds(func_name, dim)
+        
+        # Check if the function supports the requested dimension
+        if not self.benchmark.is_dimension_compatible(func_name, dim):
+            required_dim = self.benchmark.get_required_dimension(func_name)
+            if required_dim is not None:
+                print(f"Warning: {func_name} only supports {required_dim}D input, adjusting dimension from {dim}D to {required_dim}D")
+                dim = required_dim
+            else:
+                print(f"Warning: {func_name} may not support {dim}D input, proceeding anyway...")
+        
+        # Get bounds for the adjusted dimension
+        bounds = self.benchmark.get_reasonable_bounds(func_name, dim)
         
         results = []
         run_times = []
@@ -28,20 +39,23 @@ class ExperimentRunner:
             
             if algorithm == "ga":
                 optimizer = GeneticAlgorithm(
-                    objective_func=func_info['func'],
+                    objective_func=lambda x: self.benchmark.evaluate(func_name, x),
                     dim=dim,
                     bounds=bounds,
                     population_size=50,
-                    mutation_rate=0.01,
-                    crossover_rate=0.75,
+                    mutation_rate=0.1,
+                    crossover_rate=0.8,
                     max_fitness_calls=40000)
             elif algorithm == "pso":
                 optimizer = ParticleSwarmOptimization(
-                    objective_func=func_info['func'],
+                    objective_func=lambda x: self.benchmark.evaluate(func_name, x),
                     dim=dim,
                     bounds=bounds,
-                    num_particles=50,
-                    max_fitness_calls=40000
+                    num_particles=100,
+                    max_fitness_calls=40000,
+                    w=0.9,
+                    c1=2.0,
+                    c2=2.0
                 )
             else:
                 raise ValueError(f"Unknown algorithm: {algorithm}")
@@ -51,10 +65,10 @@ class ExperimentRunner:
             
             results.append({
                 "best_score": best_scores[-1],
-                "best_position": best_position.tolist(),
-                "convergence": best_scores,
-                "run_time": end_time - start_time,
-                "fitness_calls": optimizer.fitness_evaluations
+                # "best_position": best_position.tolist(),
+                # "convergence": best_scores,
+                # "run_time": end_time - start_time,
+                # "fitness_calls": optimizer.fitness_evaluations
             })
             
             run_times.append(end_time - start_time)

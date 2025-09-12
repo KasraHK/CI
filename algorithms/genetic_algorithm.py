@@ -38,16 +38,21 @@ class GeneticAlgorithm:
     def evaluate_fitness(self, individuals):
         """Evaluate fitness and track the number of evaluations"""
         if individuals.ndim == 1:
-            fitness_vector = self.objective_func(individuals)
-            fitness_value = np.sum(fitness_vector)
+            fitness_value = self.objective_func(individuals)
+            # Ensure we get a scalar value
+            if hasattr(fitness_value, '__len__') and len(fitness_value) > 1:
+                fitness_value = np.sum(fitness_value)
             self.fitness_evaluations += 1
             return fitness_value
         
         # For multiple individuals
         fitness_values = []
         for ind in individuals:
-            fitness_vector = self.objective_func(ind)
-            fitness_values.append(np.sum(fitness_vector))
+            fitness_value = self.objective_func(ind)
+            # Ensure we get a scalar value
+            if hasattr(fitness_value, '__len__') and len(fitness_value) > 1:
+                fitness_value = np.sum(fitness_value)
+            fitness_values.append(fitness_value)
             self.fitness_evaluations += 1
         
         return np.array(fitness_values)
@@ -181,6 +186,12 @@ class GeneticAlgorithm:
             self.best_fitness_history.append(np.min(self.fitness))
             
             iteration += 1
+            
+            # Early stopping if converged
+            if len(self.best_fitness_history) > 50:
+                recent_improvement = self.best_fitness_history[-50] - self.best_fitness_history[-1]
+                if recent_improvement < 1e-10:
+                    break
             
             # Break if we've reached the maximum fitness evaluations
             if self.fitness_evaluations >= self.max_fitness_calls:

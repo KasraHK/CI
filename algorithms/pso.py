@@ -36,16 +36,21 @@ class ParticleSwarmOptimization:
     def evaluate_fitness(self, positions):
         """Evaluate fitness and track the number of evaluations"""
         if positions.ndim == 1:
-            fitness_vector = self.objective_func(positions)
-            fitness_value = np.sum(fitness_vector)
+            fitness_value = self.objective_func(positions)
+            # Ensure we get a scalar value
+            if hasattr(fitness_value, '__len__') and len(fitness_value) > 1:
+                fitness_value = np.sum(fitness_value)
             self.fitness_evaluations += 1
             return fitness_value
         
         # For multiple positions
         fitness_values = []
         for pos in positions:
-            fitness_vector = self.objective_func(pos)
-            fitness_values.append(np.sum(fitness_vector))
+            fitness_value = self.objective_func(pos)
+            # Ensure we get a scalar value
+            if hasattr(fitness_value, '__len__') and len(fitness_value) > 1:
+                fitness_value = np.sum(fitness_value)
+            fitness_values.append(fitness_value)
             self.fitness_evaluations += 1
         
         return np.array(fitness_values)
@@ -128,6 +133,12 @@ class ParticleSwarmOptimization:
             self.evaluate()
             
             self.best_fitness_history.append(self.global_best_score)
+            
+            # Early stopping if converged
+            if len(self.best_fitness_history) > 50:
+                recent_improvement = self.best_fitness_history[-50] - self.best_fitness_history[-1]
+                if recent_improvement < 1e-10:
+                    break
             
             # Break if we've reached the maximum fitness evaluations
             if self.fitness_evaluations >= self.max_fitness_calls:
