@@ -36,7 +36,14 @@ class GeneticAlgorithm:
         self.initialize_population()
         
     def evaluate_fitness(self, individuals):
-        """Evaluate fitness and track the number of evaluations"""
+        """Evaluate fitness and track the number of evaluations
+        
+        Args:
+            individuals (numpy.ndarray): Individual(s) to evaluate
+            
+        Returns:
+            numpy.ndarray or float: Fitness value(s) for the individual(s)
+        """
         if individuals.ndim == 1:
             fitness_value = self.objective_func(individuals)
             # Ensure we get a scalar value
@@ -58,6 +65,7 @@ class GeneticAlgorithm:
         return np.array(fitness_values)
         
     def initialize_population(self):
+        """Initialize the population with random individuals within bounds"""
         self.population = np.random.uniform(
             low=self.bounds[:, 0], 
             high=self.bounds[:, 1], 
@@ -67,6 +75,14 @@ class GeneticAlgorithm:
         self.best_fitness_history = [np.min(self.fitness)]
         
     def tournament_selection(self, tournament_size=3):
+        """Perform tournament selection
+        
+        Args:
+            tournament_size (int): Number of individuals in each tournament
+            
+        Returns:
+            numpy.ndarray: Selected individuals from the population
+        """
         selected_indices = []
         for _ in range(self.population_size):
             contestants = np.random.choice(self.population_size, tournament_size, replace=False)
@@ -75,6 +91,11 @@ class GeneticAlgorithm:
         return self.population[selected_indices]
     
     def roulette_selection(self):
+        """Perform roulette wheel (fitness proportionate) selection
+        
+        Returns:
+            numpy.ndarray: Selected individuals from the population
+        """
         # Fitness proportionate selection
         max_fitness = np.max(self.fitness)
         fitness_normalized = max_fitness - self.fitness + 1e-10  # Avoid division by zero
@@ -83,6 +104,11 @@ class GeneticAlgorithm:
         return self.population[selected_indices]
     
     def selection(self):
+        """Perform selection based on the configured selection method
+        
+        Returns:
+            numpy.ndarray: Selected individuals from the population
+        """
         if self.selection_method == 'tournament':
             return self.tournament_selection()
         elif self.selection_method == 'roulette':
@@ -91,6 +117,14 @@ class GeneticAlgorithm:
             return self.tournament_selection()  # Default
     
     def single_point_crossover(self, parents):
+        """Perform single-point crossover on parent pairs
+        
+        Args:
+            parents (numpy.ndarray): Parent individuals
+            
+        Returns:
+            numpy.ndarray: Offspring individuals
+        """
         offspring = np.zeros_like(parents)
         for i in range(0, self.population_size, 2):
             if i + 1 < self.population_size and np.random.rand() < self.crossover_rate:
@@ -157,6 +191,11 @@ class GeneticAlgorithm:
             return self.uniform_mutation(offspring)  # Default
     
     def run(self):
+        """Run the genetic algorithm optimization
+        
+        Returns:
+            tuple: (best_fitness_history, best_position) - convergence history and best solution found
+        """
         self.initialize_population()
         iteration = 0
         

@@ -44,7 +44,7 @@ class BenchmarkExperimentRunner:
         self.multimodal_functions = [f for f in self.multimodal_functions 
                                    if f in self.benchmark.functions]
         
-    def run_single_experiment(self, func_name, algorithm, runs=5, dim=10):
+    def run_single_experiment(self, func_name, algorithm, runs=20, dim=10):
         """Run a single experiment for one function and algorithm"""
         func_info = self.benchmark.get_function(func_name)
         
@@ -109,7 +109,18 @@ class BenchmarkExperimentRunner:
         return results, np.mean(run_times), np.mean(fitness_calls_history)
     
     def run_category_experiments(self, functions, category_name, algorithms=["ga", "pso"], runs=10, dim=10):
-        """Run experiments for a specific category of functions"""
+        """Run experiments for a specific category of functions (unimodal or multimodal)
+        
+        Args:
+            functions (list): List of function names to test
+            category_name (str): Name of the category (e.g., "Unimodal", "Multimodal")
+            algorithms (list): List of algorithms to test (default: ["ga", "pso"])
+            runs (int): Number of runs per function-algorithm combination
+            dim (int): Default dimension for functions that support any dimension
+            
+        Returns:
+            tuple: (results, execution_times, fitness_calls) dictionaries
+        """
         
         results = {}
         execution_times = {}
@@ -140,7 +151,17 @@ class BenchmarkExperimentRunner:
         return results, execution_times, fitness_calls
     
     def create_results_table(self, results, execution_times, fitness_calls, category_name):
-        """Create a results table for a category of functions"""
+        """Create a results table for a category of functions
+        
+        Args:
+            results (dict): Dictionary containing experiment results for each function
+            execution_times (dict): Dictionary containing execution times for each function
+            fitness_calls (dict): Dictionary containing fitness call counts for each function
+            category_name (str): Name of the category (e.g., "Unimodal", "Multimodal")
+            
+        Returns:
+            pandas.DataFrame: Formatted results table with statistics for each function-algorithm combination
+        """
         table_data = []
         
         for func_name in results:
@@ -176,7 +197,19 @@ class BenchmarkExperimentRunner:
     def save_results(self, unimodal_results, multimodal_results, 
                     unimodal_times, multimodal_times,
                     unimodal_fitness, multimodal_fitness):
-        """Save all results to files with proper organization"""
+        """Save all results to files with proper organization
+        
+        Args:
+            unimodal_results (dict): Results for unimodal functions
+            multimodal_results (dict): Results for multimodal functions
+            unimodal_times (dict): Execution times for unimodal functions
+            multimodal_times (dict): Execution times for multimodal functions
+            unimodal_fitness (dict): Fitness call counts for unimodal functions
+            multimodal_fitness (dict): Fitness call counts for multimodal functions
+            
+        Returns:
+            tuple: (unimodal_table, multimodal_table, unimodal_csv, multimodal_csv, detailed_json)
+        """
         
         # Create tables
         unimodal_table = self.create_results_table(unimodal_results, unimodal_times, unimodal_fitness, "Unimodal")
@@ -220,7 +253,17 @@ class BenchmarkExperimentRunner:
         return unimodal_table, multimodal_table, unimodal_csv, multimodal_csv, detailed_json
     
     def run_all_experiments(self, runs=None, dim=None):
-        """Run all experiments and generate tables"""
+        """Run all experiments and generate tables
+        
+        Args:
+            runs (int, optional): Number of runs per function-algorithm combination. 
+                                If None, uses EXPERIMENT_CONFIG["runs_per_experiment"]
+            dim (int, optional): Default dimension for functions that support any dimension.
+                               If None, uses EXPERIMENT_CONFIG["default_dimension"]
+                               
+        Returns:
+            tuple: (unimodal_table, multimodal_table) - pandas DataFrames with results
+        """
         # Use configuration defaults if not specified
         runs = runs or EXPERIMENT_CONFIG["runs_per_experiment"]
         dim = dim or EXPERIMENT_CONFIG["default_dimension"]
@@ -248,14 +291,14 @@ class BenchmarkExperimentRunner:
         total_time = end_time - start_time
         
         print(f"\n{'='*80}")
-        print("✅ EXPERIMENT RESULTS SUMMARY")
+        print(" EXPERIMENT RESULTS SUMMARY")
         print(f"{'='*80}")
-        print(f"⏱️  Total execution time: {total_time:.2f} seconds ({total_time/60:.2f} minutes)")
-        print(f"📊 Unimodal functions table: {unimodal_csv}")
-        print(f"📊 Multimodal functions table: {multimodal_csv}")
-        print(f"📁 Detailed results: {detailed_json}")
-        print(f"\n📈 Unimodal table shape: {unimodal_table.shape}")
-        print(f"📈 Multimodal table shape: {multimodal_table.shape}")
+        print(f"⏱  Total execution time: {total_time:.2f} seconds ({total_time/60:.2f} minutes)")
+        print(f" Unimodal functions table: {unimodal_csv}")
+        print(f" Multimodal functions table: {multimodal_csv}")
+        print(f" Detailed results: {detailed_json}")
+        print(f"\n Unimodal table shape: {unimodal_table.shape}")
+        print(f" Multimodal table shape: {multimodal_table.shape}")
         
         return unimodal_table, multimodal_table
 

@@ -34,7 +34,14 @@ class ParticleSwarmOptimization:
         self.best_fitness_history = []
         
     def evaluate_fitness(self, positions):
-        """Evaluate fitness and track the number of evaluations"""
+        """Evaluate fitness and track the number of evaluations
+        
+        Args:
+            positions (numpy.ndarray): Particle position(s) to evaluate
+            
+        Returns:
+            numpy.ndarray or float: Fitness value(s) for the position(s)
+        """
         if positions.ndim == 1:
             fitness_value = self.objective_func(positions)
             # Ensure we get a scalar value
@@ -56,6 +63,7 @@ class ParticleSwarmOptimization:
         return np.array(fitness_values)
         
     def initialize_particles(self):
+        """Initialize particle positions, velocities, and personal/global bests"""
         self.positions = np.random.uniform(
             low=self.bounds[:, 0], 
             high=self.bounds[:, 1], 
@@ -82,6 +90,7 @@ class ParticleSwarmOptimization:
         self.global_best_score = self.personal_best_scores[self.global_best_index]
         
     def update_velocities(self):
+        """Update particle velocities using PSO velocity update equation"""
         r1 = np.random.random((self.num_particles, self.dim))
         r2 = np.random.random((self.num_particles, self.dim))
         
@@ -99,6 +108,7 @@ class ParticleSwarmOptimization:
             )
         
     def update_positions(self):
+        """Update particle positions and apply boundary constraints"""
         self.positions += self.velocities
         
         # Apply bounds
@@ -110,6 +120,7 @@ class ParticleSwarmOptimization:
             )
         
     def evaluate(self):
+        """Evaluate current positions and update personal/global bests"""
         scores = self.evaluate_fitness(self.positions)
         
         # Update personal best
@@ -124,6 +135,11 @@ class ParticleSwarmOptimization:
             self.global_best_score = scores[self.global_best_index]
             
     def run(self):
+        """Run the particle swarm optimization algorithm
+        
+        Returns:
+            tuple: (best_fitness_history, best_position) - convergence history and best solution found
+        """
         self.initialize_particles()
         self.best_fitness_history.append(self.global_best_score)
         

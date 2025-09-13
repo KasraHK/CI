@@ -20,7 +20,14 @@ class TableRenderer:
         self.runner = BenchmarkExperimentRunner()
         
     def load_latest_results(self):
-        """Load the most recent experiment results"""
+        """Load the most recent experiment results
+        
+        Returns:
+            dict: Dictionary containing the most recent experiment results
+            
+        Raises:
+            FileNotFoundError: If no detailed results files are found
+        """
         data_dir = self.results_dir / "data"
         
         # Find the most recent detailed results file
@@ -36,7 +43,15 @@ class TableRenderer:
             return json.load(f)
     
     def create_comparison_table(self, results, category_name):
-        """Create GA vs PSO comparison table with avg, std, rank"""
+        """Create GA vs PSO comparison table with avg, std, rank
+        
+        Args:
+            results (dict): Dictionary containing experiment results for each function
+            category_name (str): Name of the category (e.g., "Unimodal", "Multimodal")
+            
+        Returns:
+            pandas.DataFrame: Comparison table with statistics and rankings
+        """
         
         # Prepare data for comparison
         comparison_data = []
@@ -78,7 +93,15 @@ class TableRenderer:
         return df
     
     def create_function_info_table(self, functions, category_name):
-        """Create function information table with range, dim, fmin"""
+        """Create function information table with range, dim, fmin
+        
+        Args:
+            functions (list): List of function names
+            category_name (str): Name of the category (e.g., "Unimodal", "Multimodal")
+            
+        Returns:
+            pandas.DataFrame: Function information table
+        """
         
         info_data = []
         
@@ -105,7 +128,14 @@ class TableRenderer:
         return pd.DataFrame(info_data)
     
     def format_comparison_table(self, df):
-        """Format the comparison table for display"""
+        """Format the comparison table for display
+        
+        Args:
+            df (pandas.DataFrame): Comparison table to format
+            
+        Returns:
+            str: Formatted table string for console display
+        """
         if df.empty:
             return "No data available"
         
@@ -131,6 +161,14 @@ class TableRenderer:
         return "\n".join(lines)
     
     def format_function_info_table(self, df):
+        """Format the function information table for display
+        
+        Args:
+            df (pandas.DataFrame): Function info table to format
+            
+        Returns:
+            str: Formatted table string for console display
+        """
         """Format the function info table for display"""
         if df.empty:
             return "No data available"
@@ -191,6 +229,11 @@ class TableRenderer:
         }
     
     def generate_all_tables(self):
+        """Generate and save all formatted tables
+        
+        Returns:
+            list: List of file paths for generated table files
+        """
         """Generate all 4 tables from the latest experiment results"""
         
         print("📊 Loading experiment results...")

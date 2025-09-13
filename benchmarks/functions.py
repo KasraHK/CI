@@ -7,6 +7,11 @@ class BenchmarkSuite:
         self._setup_functions()
     
     def _setup_functions(self):
+        """Setup and register all available benchmark functions
+        
+        This method discovers all available functions from the benchmarkfcns library,
+        categorizes them as unimodal or multimodal, and stores their properties.
+        """
         # Get all available function names from benchmarkfcns
         all_function_names = [
             name for name in dir(benchmarkfcns) 
@@ -43,11 +48,31 @@ class BenchmarkSuite:
                 print(f"Warning: Could not load function {fname}: {e}")
     
     def get_function(self, name):
+        """Get function information by name
+        
+        Args:
+            name (str): Name of the benchmark function
+            
+        Returns:
+            dict: Dictionary containing function properties (func, bounds, dim, min_value, is_unimodal)
+            
+        Raises:
+            ValueError: If the function name is not available
+        """
         if name not in self.functions:
             raise ValueError(f"Function {name} not available")
         return self.functions[name]
     
     def evaluate(self, name, x):
+        """Evaluate a benchmark function at given point(s)
+        
+        Args:
+            name (str): Name of the benchmark function
+            x (numpy.ndarray): Input point(s) for evaluation
+            
+        Returns:
+            float: Function value at the given point(s)
+        """
         func_info = self.get_function(name)
         
         # Handle functions that require 2D input (check dimension requirements)
@@ -67,6 +92,15 @@ class BenchmarkSuite:
         return result
     
     def get_bounds(self, name, dim=None):
+        """Get bounds for a benchmark function
+        
+        Args:
+            name (str): Name of the benchmark function
+            dim (int, optional): Dimension for bounds. If None, uses function's default dimension
+            
+        Returns:
+            numpy.ndarray: Array of bounds for each dimension
+        """
         func_info = self.get_function(name)
         if dim is not None:
             # Return bounds for specified dimension
@@ -74,7 +108,11 @@ class BenchmarkSuite:
         return np.tile(func_info['bounds'][0], (func_info['dim'], 1))
     
     def get_function_dimension_requirements(self):
-        """Get dimension requirements for functions that have restrictions"""
+        """Get dimension requirements for functions that have restrictions
+        
+        Returns:
+            dict: Dictionary mapping function names to their required dimensions
+        """
         return {
             # 1D functions
             'forrester': 1,
@@ -120,19 +158,42 @@ class BenchmarkSuite:
         }
     
     def get_required_dimension(self, name):
-        """Get the required dimension for a function, or None if any dimension is supported"""
+        """Get the required dimension for a function, or None if any dimension is supported
+        
+        Args:
+            name (str): Name of the benchmark function
+            
+        Returns:
+            int or None: Required dimension if function has restrictions, None if any dimension is supported
+        """
         dimension_requirements = self.get_function_dimension_requirements()
         return dimension_requirements.get(name, None)
     
     def is_dimension_compatible(self, name, dim):
-        """Check if a function supports the given dimension"""
+        """Check if a function supports the given dimension
+        
+        Args:
+            name (str): Name of the benchmark function
+            dim (int): Dimension to check compatibility for
+            
+        Returns:
+            bool: True if function supports the given dimension, False otherwise
+        """
         required_dim = self.get_required_dimension(name)
         if required_dim is None:
             return True  # Function supports any dimension
         return dim == required_dim
     
     def get_reasonable_bounds(self, name, dim=None):
-        """Get more reasonable bounds for optimization algorithms"""
+        """Get more reasonable bounds for optimization algorithms
+        
+        Args:
+            name (str): Name of the benchmark function
+            dim (int, optional): Dimension for bounds. If None, uses function's default dimension
+            
+        Returns:
+            numpy.ndarray: Array of reasonable bounds for optimization
+        """
         # Define reasonable bounds for common functions
         reasonable_bounds = {
             'sphere': [-5, 5],
@@ -203,25 +264,68 @@ class BenchmarkSuite:
             return scaled_bounds
     
     def get_dimension(self, name):
+        """Get the default dimension for a function
+        
+        Args:
+            name (str): Name of the benchmark function
+            
+        Returns:
+            int: Default dimension of the function
+        """
         return self.get_function(name)['dim']
     
     def get_min_value(self, name):
+        """Get the minimum value for a function
+        
+        Args:
+            name (str): Name of the benchmark function
+            
+        Returns:
+            float: Minimum value of the function
+        """
         return self.get_function(name)['min_value']
     
     def is_unimodal(self, name):
+        """Check if a function is unimodal
+        
+        Args:
+            name (str): Name of the benchmark function
+            
+        Returns:
+            bool: True if function is unimodal, False if multimodal
+        """
         return self.get_function(name)['is_unimodal']
     
     def get_all_functions(self):
+        """Get list of all available function names
+        
+        Returns:
+            list: List of all available benchmark function names
+        """
         return list(self.functions.keys())
     
     def get_unimodal_functions(self):
+        """Get list of all unimodal function names
+        
+        Returns:
+            list: List of unimodal benchmark function names
+        """
         return [f for f in self.functions if self.functions[f]['is_unimodal']]
     
     def get_multimodal_functions(self):
+        """Get list of all multimodal function names
+        
+        Returns:
+            list: List of multimodal benchmark function names
+        """
         return [f for f in self.functions if not self.functions[f]['is_unimodal']]
     
     def get_functions_by_dimension_support(self):
-        """Get functions categorized by dimension support"""
+        """Get functions categorized by dimension support
+        
+        Returns:
+            dict: Dictionary with 'any_dimension' and 'two_dimension_only' keys containing function lists
+        """
         dimension_requirements = self.get_function_dimension_requirements()
         
         any_dimension = []
@@ -239,7 +343,14 @@ class BenchmarkSuite:
         }
     
     def get_compatible_functions(self, dim):
-        """Get all functions that support the given dimension"""
+        """Get all functions that support the given dimension
+        
+        Args:
+            dim (int): Dimension to check compatibility for
+            
+        Returns:
+            list: List of function names that support the given dimension
+        """
         dimension_requirements = self.get_function_dimension_requirements()
         
         compatible = []
@@ -251,7 +362,14 @@ class BenchmarkSuite:
         return compatible
     
     def get_function_info(self, name):
-        """Get complete information about a function for table generation"""
+        """Get complete information about a function for table generation
+        
+        Args:
+            name (str): Name of the benchmark function
+            
+        Returns:
+            dict: Dictionary containing function information (name, range, dim, fmin, type)
+        """
         func_info = self.get_function(name)
         return {
             'name': name,

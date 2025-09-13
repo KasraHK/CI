@@ -39,7 +39,15 @@ class SimpleWebVisualizer:
             return json.load(f)
     
     def create_comparison_dataframe(self, results, category_name):
-        """Create DataFrame for comparison tables"""
+        """Create DataFrame for comparison tables
+        
+        Args:
+            results (dict): Dictionary containing experiment results for each function
+            category_name (str): Name of the category (e.g., "Unimodal", "Multimodal")
+            
+        Returns:
+            pandas.DataFrame: Comparison DataFrame with statistics and rankings
+        """
         comparison_data = []
         
         for func_name in results:
@@ -78,7 +86,14 @@ class SimpleWebVisualizer:
         return df
     
     def create_function_info_dataframe(self, functions):
-        """Create DataFrame for function information"""
+        """Create DataFrame for function information
+        
+        Args:
+            functions (list): List of function names
+            
+        Returns:
+            pandas.DataFrame: Function information DataFrame
+        """
         info_data = []
         
         for func_name in functions:
@@ -110,7 +125,16 @@ class SimpleWebVisualizer:
         return pd.DataFrame(info_data)
     
     def create_comparison_table_html(self, df, title, filename):
-        """Create interactive HTML table for comparison"""
+        """Create interactive HTML table for comparison
+        
+        Args:
+            df (pandas.DataFrame): DataFrame to convert to HTML
+            title (str): Title for the HTML table
+            filename (str): Filename for the HTML file
+            
+        Returns:
+            str: Path to the created HTML file
+        """
         if df.empty:
             return
         
@@ -246,7 +270,16 @@ class SimpleWebVisualizer:
         return html_file
     
     def create_function_info_html(self, df, title, filename):
-        """Create HTML table for function information"""
+        """Create HTML table for function information
+        
+        Args:
+            df (pandas.DataFrame): DataFrame to convert to HTML
+            title (str): Title for the HTML table
+            filename (str): Filename for the HTML file
+            
+        Returns:
+            str: Path to the created HTML file
+        """
         if df.empty:
             return
         
@@ -352,7 +385,14 @@ class SimpleWebVisualizer:
         return html_file
     
     def create_dashboard_html(self, files):
-        """Create main dashboard HTML page"""
+        """Create main dashboard HTML page
+        
+        Args:
+            files (dict): Dictionary containing paths to all HTML files
+            
+        Returns:
+            str: Path to the created dashboard HTML file
+        """
         
         html_content = f"""
         <!DOCTYPE html>
@@ -430,7 +470,11 @@ class SimpleWebVisualizer:
         return dashboard_file
     
     def generate_all_visualizations(self):
-        """Generate all web visualizations"""
+        """Generate all web visualizations
+        
+        Returns:
+            dict: Dictionary containing paths to all generated HTML files
+        """
         
         # print("🌐 Loading experiment results...")
         results = self.load_latest_results()
@@ -468,7 +512,11 @@ class SimpleWebVisualizer:
         return dashboard_file, files
     
     def open_dashboard(self):
-        """Open the dashboard in the default web browser"""
+        """Open the dashboard in the default web browser
+        
+        Returns:
+            str: Path to the dashboard HTML file
+        """
         dashboard_file, _ = self.generate_all_visualizations()
         
         # print(f"\n🌐 Opening dashboard in browser...")

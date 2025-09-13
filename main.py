@@ -15,10 +15,10 @@ def main():
 
     
     # unimodal_table, multimodal_table = runner.run_all_experiments()
-    print(runner.run_single_experiment('ackleyn4', 'ga'))
+    print(runner.run_single_experiment('shubert', 'ga', runs=5))
 
     
-    # # # Generate formatted tables
+    # # Generate formatted tables
     # renderer = TableRenderer(results_dir=EXPERIMENT_CONFIG["results_directory"])
     # renderer.generate_all_tables()
     
