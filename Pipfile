@@ -5,13 +5,16 @@ name = "pypi"
 
 [packages]
 numpy = "*"
-pandas = "*"
 matplotlib = "*"
 jupyter = "*"
 opfunu = "*"
 pybenchfcn = "*"
 benchmarkfcns = "*"
 tqdm = "*"
+pandas = "*"
+dash = "*"
+openpyxl = "*"
+plotly = "*"
 
 [dev-packages]
 

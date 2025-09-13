@@ -12,6 +12,7 @@ class BenchmarkSuite:
             name for name in dir(benchmarkfcns) 
             if not name.startswith('_') and callable(getattr(benchmarkfcns, name))
         ]
+        print(all_function_names)
         
         # Register all functions
         for fname in all_function_names:
@@ -23,14 +24,13 @@ class BenchmarkSuite:
                 dim = getattr(func, 'dim', 30)
                 min_value = getattr(func, 'min_value', 0.0)
                 
-                # Determine if function is unimodal (you'll need to categorize these)
+                # Determine if function is unimodal based on user-specified lists
                 is_unimodal = fname in [
-                    'sphere', 'ellipsoid', 'sum_squares', 'rotated_ellipsoid', 
-                    'discus', 'bent_cigar', 'different_powers', 'schwefel_12',
-                    'schwefel_221', 'schwefel_222', 'rosenbrock', 'dixon_price',
-                    'rotated_rosenbrock', 'rotated_schwefel_12', 'rotated_schwefel_221',
-                    'rotated_schwefel_222', 'rotated_discus', 'different_powers_rotated',
-                    'bent_cigar_rotated', 'rotated_bent_cigar', 'rotated_different_powers'
+                    # Unimodal functions from user specification
+                    'ackleyn2', 'bohachevskyn1', 'booth', 'brent', 'brown', 'dropwave', 'exponential',
+                    'powellsum', 'ridge', 'schaffern1', 'schaffern2', 'schaffern3', 'schaffern4',
+                    'schwefel220', 'schwefel221', 'schwefel222', 'schwefel223', 'sphere', 'sumsquares',
+                    'threehumpcamel', 'trid', 'xinsheyangn3'
                 ]
                 
                 self.functions[fname] = {
@@ -40,7 +40,6 @@ class BenchmarkSuite:
                     'min_value': min_value,
                     'is_unimodal': is_unimodal
                 }
-                
             except Exception as e:
                 print(f"Warning: Could not load function {fname}: {e}")
     
@@ -52,8 +51,9 @@ class BenchmarkSuite:
     def evaluate(self, name, x):
         func_info = self.get_function(name)
         
-        # Handle special cases for functions with specific input requirements
-        if name in ['eggcrate', 'ackleyn2', 'ackleyn3', 'ackleyn4', 'adjiman', 'bartels']:
+        # Handle functions that require 2D input (check dimension requirements)
+        required_dim = self.get_required_dimension(name)
+        if required_dim == 2:
             # These functions require 2D array (1 row, n columns) where n is the dimension
             if x.ndim == 1:
                 x = x.reshape(1, -1)
@@ -77,152 +77,59 @@ class BenchmarkSuite:
     def get_function_dimension_requirements(self):
         """Get dimension requirements for functions that have restrictions"""
         return {
-            # Functions that only work with 2D input
-            'eggcrate': 2,
+            # Functions that only work with specific dimensions (these are truly fixed-dimension)
+            'forrester': 1,      # Only defined on 1D space
+            'gramacylee': 1,     # Only defined on 1D space
+            'wolfe': 3,          # Only defined on 3D space
+            
+            # Functions that only work with 2D input (these are truly 2D-only)
             'ackleyn2': 2,
             'ackleyn3': 2,
-            'adjiman' : 2,
             'ackleyn4': 2,
-            'himmelblau': 2,
-            'beale': 2,
-            'goldsteinprice': 2,
-            'booth': 2,
-            'bartels': 2,
-            'bukinn2': 2,
-            'bukinn4': 2,
-            'bukinn6': 2,
-            'threehumpcamel': 2,
-            'holdertable': 2,
-            'leon': 2,
-            'crossintray': 2,
-            'shubert': 2,
-            'shubertn3': 2,
-            'shubertn4': 2,
-            'vincent': 2,
-            'wolfe': 2,
-            'easom': 2,
-            'mccormick': 2,
-            'braninn1': 2,
-            'braninn2': 2,
-            'brent': 2,
-            'brown': 2,
-            'carromtable': 2,
-            'chichinadze': 2,
-            'cosinemixture': 2,
-            'crownedcross': 2,
-            'csendes': 2,
-            'cubefcn': 2,
-            'debn1': 2,
-            'deckkersaarts': 2,
-            'dropwave': 2,
-            'elattar': 2,
-            'exponential': 2,
-            'forrester': 2,
-            'giunta': 2,
-            'gramacylee': 2,
-            'happycat': 2,
-            'hosaki': 2,
-            'keane': 2,
-            'levin13': 2,
-            'matyas': 2,
-            'multifidelity': 2,
-            'periodic': 2,
-            'picheny': 2,
-            'powellsum': 2,
-            'qing': 2,
-            'quartic': 2,
-            'rana': 2,
-            'ridge': 2,
-            'salomon': 2,
-            'schaffern1': 2,
-            'schaffern2': 2,
-            'schaffern3': 2,
-            'schaffern4': 2,
-            'styblinskitank': 2,
-            'sumsquares': 2,
-            'treccani': 2,
-            'trid': 2,
-            'watson': 2,
-            'wavy': 2,
-            'wayburnseadern2': 2,
-            'xinsheyangn1': 2,
-            'xinsheyangn2': 2,
-            'xinsheyangn3': 2,
-            'xinsheyangn4': 2,
-            'yaoliun4': 2,
-            'yaoliun9': 2,
-            'zerosum': 2,
-            'zettel': 2,
-            'zimmerman': 2,
-            'zirilli': 2,
             'adjiman': 2,
-            'alpinen1': 2,
-            'alpinen2': 2,
-            'amgm': 2,
-            'annotations': 2,
             'bartelsconn': 2,
+            'beale': 2,
             'bird': 2,
             'bohachevskyn1': 2,
             'bohachevskyn2': 2,
-            'braninn1': 2,
-            'braninn2': 2,
+            'booth': 2,
             'brent': 2,
             'brown': 2,
-            'bukinn2': 2,
-            'bukinn4': 2,
             'bukinn6': 2,
             'carromtable': 2,
-            'chichinadze': 2,
-            'cigar': 2,
-            'cosinemixture': 2,
-            'crownedcross': 2,
-            'csendes': 2,
-            'cubefcn': 2,
-            'debn1': 2,
-            'deckkersaarts': 2,
+            'crossintray': 2,
             'dropwave': 2,
             'easom': 2,
-            'elattar': 2,
+            'eggcrate': 2,
             'exponential': 2,
-            'forrester': 2,
-            'giunta': 2,
-            'gramacylee': 2,
+            'goldsteinprice': 2,
             'happycat': 2,
-            'hosaki': 2,
+            'himmelblau': 2,
+            'holdertable': 2,
             'keane': 2,
+            'leon': 2,
             'levin13': 2,
             'matyas': 2,
             'mccormick': 2,
-            'multifidelity': 2,
             'periodic': 2,
-            'picheny': 2,
             'powellsum': 2,
             'qing': 2,
             'quartic': 2,
-            'rana': 2,
             'ridge': 2,
             'salomon': 2,
             'schaffern1': 2,
             'schaffern2': 2,
             'schaffern3': 2,
             'schaffern4': 2,
+            'shubert': 2,
+            'shubertn4': 2,
             'styblinskitank': 2,
             'sumsquares': 2,
-            'treccani': 2,
+            'threehumpcamel': 2,
             'trid': 2,
-            'watson': 2,
-            'wavy': 2,
-            'wayburnseadern2': 2,
-            'xinsheyangn1': 2,
             'xinsheyangn2': 2,
             'xinsheyangn3': 2,
             'xinsheyangn4': 2,
-            'yaoliun4': 2,
-            'yaoliun9': 2,
-            'zerosum': 2,
-            'zettel': 2,
-            'zimmerman': 2,
-            'zirilli': 2,
         }
     
     def get_required_dimension(self, name):

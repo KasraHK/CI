@@ -1,0 +1,315 @@
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Unimodal Functions - GA vs PSO Comparison</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+            <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+            <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+            <style>
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+                .table-container { margin: 20px; }
+                .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; margin-bottom: 20px; }
+                .metric-card { background: #f8f9fa; border-left: 4px solid #007bff; padding: 15px; margin: 10px 0; }
+                .ga-color { color: #dc3545; font-weight: bold; }
+                .pso-color { color: #28a745; font-weight: bold; }
+                .rank-1 { background-color: #ffd700 !important; }
+                .rank-2 { background-color: #c0c0c0 !important; }
+                .rank-3 { background-color: #cd7f32 !important; }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h1>Unimodal Functions - GA vs PSO Comparison</h1>
+                <p>Performance comparison between Genetic Algorithm (GA) and Particle Swarm Optimization (PSO)</p>
+            </div>
+            
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="metric-card">
+                            <h5>Total Functions</h5>
+                            <h3>22</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="metric-card">
+                            <h5>GA Wins</h5>
+                            <h3 class="ga-color">6</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="metric-card">
+                            <h5>PSO Wins</h5>
+                            <h3 class="pso-color">7</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="metric-card">
+                            <h5>Ties</h5>
+                            <h3>9</h3>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table id="comparisonTable" class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Function</th>
+                                <th colspan="3" class="text-center ga-color">Genetic Algorithm (GA)</th>
+                                <th colspan="3" class="text-center pso-color">Particle Swarm (PSO)</th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th>Average</th>
+                                <th>Std Dev</th>
+                                <th>Rank</th>
+                                <th>Average</th>
+                                <th>Std Dev</th>
+                                <th>Rank</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        
+                            <tr>
+                                <td><strong>ackleyn2</strong></td>
+                                <td class="rank-1">-199.336330</td>
+                                <td>0.356289</td>
+                                <td class="rank-1"><strong>1</strong></td>
+                                <td class="rank-1">-199.811500</td>
+                                <td>0.101117</td>
+                                <td class="rank-1"><strong>1</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>bohachevskyn1</strong></td>
+                                <td class="">0.999930</td>
+                                <td>0.786623</td>
+                                <td class=""><strong>18</strong></td>
+                                <td class="">0.393294</td>
+                                <td>0.235853</td>
+                                <td class=""><strong>17</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>booth</strong></td>
+                                <td class="">0.272710</td>
+                                <td>0.290225</td>
+                                <td class=""><strong>16</strong></td>
+                                <td class="">0.000304</td>
+                                <td>0.000379</td>
+                                <td class=""><strong>14</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>brent</strong></td>
+                                <td class="">0.026175</td>
+                                <td>0.030510</td>
+                                <td class=""><strong>11</strong></td>
+                                <td class="">0.000000</td>
+                                <td>0.000000</td>
+                                <td class=""><strong>7</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>brown</strong></td>
+                                <td class="">0.002196</td>
+                                <td>0.002471</td>
+                                <td class=""><strong>8</strong></td>
+                                <td class="">0.000112</td>
+                                <td>0.000110</td>
+                                <td class=""><strong>13</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>dropwave</strong></td>
+                                <td class="">-0.935606</td>
+                                <td>0.001202</td>
+                                <td class=""><strong>6</strong></td>
+                                <td class="">-0.996494</td>
+                                <td>0.003524</td>
+                                <td class=""><strong>6</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>exponential</strong></td>
+                                <td class="">-0.998493</td>
+                                <td>0.001738</td>
+                                <td class=""><strong>4</strong></td>
+                                <td class="">-0.999971</td>
+                                <td>0.000021</td>
+                                <td class=""><strong>4</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>powellsum</strong></td>
+                                <td class="">0.000016</td>
+                                <td>0.000015</td>
+                                <td class=""><strong>7</strong></td>
+                                <td class="">0.000000</td>
+                                <td>0.000000</td>
+                                <td class=""><strong>8</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>ridge</strong></td>
+                                <td class="rank-2">-9.949273</td>
+                                <td>0.025981</td>
+                                <td class="rank-2"><strong>2</strong></td>
+                                <td class="rank-2">-9.999809</td>
+                                <td>0.000148</td>
+                                <td class="rank-2"><strong>2</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>schaffern1</strong></td>
+                                <td class="">0.039640</td>
+                                <td>0.058295</td>
+                                <td class=""><strong>14</strong></td>
+                                <td class="">0.000013</td>
+                                <td>0.000008</td>
+                                <td class=""><strong>9</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>schaffern2</strong></td>
+                                <td class="">0.033635</td>
+                                <td>0.031835</td>
+                                <td class=""><strong>12</strong></td>
+                                <td class="">0.000043</td>
+                                <td>0.000046</td>
+                                <td class=""><strong>11</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>schaffern3</strong></td>
+                                <td class="">0.055617</td>
+                                <td>0.037145</td>
+                                <td class=""><strong>15</strong></td>
+                                <td class="">0.002656</td>
+                                <td>0.000814</td>
+                                <td class=""><strong>15</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>schaffern4</strong></td>
+                                <td class="">0.300846</td>
+                                <td>0.006558</td>
+                                <td class=""><strong>17</strong></td>
+                                <td class="">0.293546</td>
+                                <td>0.000267</td>
+                                <td class=""><strong>16</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>schwefel220</strong></td>
+                                <td class="">7.194511</td>
+                                <td>5.733270</td>
+                                <td class=""><strong>20</strong></td>
+                                <td class="">29.417075</td>
+                                <td>3.798936</td>
+                                <td class=""><strong>19</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>schwefel221</strong></td>
+                                <td class="">6.723331</td>
+                                <td>1.229335</td>
+                                <td class=""><strong>19</strong></td>
+                                <td class="">32.459958</td>
+                                <td>2.024267</td>
+                                <td class=""><strong>20</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>schwefel222</strong></td>
+                                <td class="">17.682534</td>
+                                <td>5.546782</td>
+                                <td class=""><strong>21</strong></td>
+                                <td class="">66.726369</td>
+                                <td>16.142872</td>
+                                <td class=""><strong>21</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>schwefel223</strong></td>
+                                <td class="">407748.871656</td>
+                                <td>762831.409483</td>
+                                <td class=""><strong>22</strong></td>
+                                <td class="">844791115.542462</td>
+                                <td>703556389.470702</td>
+                                <td class=""><strong>22</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>sphere</strong></td>
+                                <td class="">0.038505</td>
+                                <td>0.032711</td>
+                                <td class=""><strong>13</strong></td>
+                                <td class="">0.408354</td>
+                                <td>0.104369</td>
+                                <td class=""><strong>18</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>sumsquares</strong></td>
+                                <td class="">0.008065</td>
+                                <td>0.010284</td>
+                                <td class=""><strong>10</strong></td>
+                                <td class="">0.000080</td>
+                                <td>0.000081</td>
+                                <td class=""><strong>12</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>threehumpcamel</strong></td>
+                                <td class="">0.007454</td>
+                                <td>0.009200</td>
+                                <td class=""><strong>9</strong></td>
+                                <td class="">0.000038</td>
+                                <td>0.000049</td>
+                                <td class=""><strong>10</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>trid</strong></td>
+                                <td class="rank-3">-1.961842</td>
+                                <td>0.062310</td>
+                                <td class="rank-3"><strong>3</strong></td>
+                                <td class="rank-3">-1.999925</td>
+                                <td>0.000055</td>
+                                <td class="rank-3"><strong>3</strong></td>
+                            </tr>
+            
+                            <tr>
+                                <td><strong>xinsheyangn3</strong></td>
+                                <td class="">-0.992158</td>
+                                <td>0.003720</td>
+                                <td class=""><strong>5</strong></td>
+                                <td class="">-0.999857</td>
+                                <td>0.000051</td>
+                                <td class=""><strong>5</strong></td>
+                            </tr>
+            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <script>
+                $(document).ready(function() {
+                    $('#comparisonTable').DataTable({
+                        "pageLength": 25,
+                        "order": [[3, "asc"]], // Sort by GA rank
+                        "columnDefs": [
+                            { "orderable": false, "targets": 0 }
+                        ]
+                    });
+                });
+            </script>
+        </body>
+        </html>
+        
