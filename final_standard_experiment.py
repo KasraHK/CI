@@ -77,21 +77,27 @@ def run_final_standard_experiment():
         print(f"\n[{i}/{total_functions}] Testing: {func_name}")
         print(f"Category: {func_info['type']}, Dimension Type: {func_info['dim_type']}")
         print(f"Bounds: {func_info['bounds']}")
-        print(f"Expected Global Minimum: {func_info['global_minimum']}")
+        print(f"Expected Global Minimum: {func_info.get('global_minimum', 'Unknown')}")
         print("-" * 60)
         
         # Determine dimension based on function type
         if func_info['dim_type'] == 'n-dim':
             dimension = 30
         elif isinstance(func_info['dim_type'], int):
-            dimension = func_info['dim_type']
+            dimension = func_info['dim_type']  # Use the specific dimension (2, 3, etc.)
         else:
             dimension = 30  # Default fallback
         
         # Create bounds list
         bounds = func_info['bounds']
-        if isinstance(bounds, tuple):
+        if isinstance(bounds, tuple) and len(bounds) == 2 and isinstance(bounds[0], (int, float)):
+            # Simple bounds like (-10, 10)
             bounds_list = [bounds] * dimension
+        elif isinstance(bounds, tuple) and len(bounds) == 2 and isinstance(bounds[0], tuple):
+            # Asymmetric bounds like ((-1, 2), (-1, 1))
+            bounds_list = list(bounds)
+        elif isinstance(bounds, list):
+            bounds_list = bounds
         else:
             bounds_list = bounds
         
@@ -176,12 +182,24 @@ def run_final_standard_experiment():
         ga_finite = [f for f in ga_fitness_values if np.isfinite(f)]
         pso_finite = [f for f in pso_fitness_values if np.isfinite(f)]
         
+        # Calculate success rate based on finite values (not errors)
+        ga_success_rate = len(ga_finite) / num_runs * 100
+        pso_success_rate = len(pso_finite) / num_runs * 100
+        
+        # For debugging: also calculate "quality" success rate
+        global_min = func_info.get('global_minimum')
+        if global_min is not None and global_min != 'Unknown':
+            tolerance = abs(global_min) * 0.1  # 10% tolerance
+            ga_quality_success = len([f for f in ga_finite if abs(f - global_min) <= tolerance]) / num_runs * 100
+            pso_quality_success = len([f for f in pso_finite if abs(f - global_min) <= tolerance]) / num_runs * 100
+            print(f"  Quality Success (within 10% of global min): GA={ga_quality_success:.1f}%, PSO={pso_quality_success:.1f}%")
+        
         ga_stats = {
             'mean': np.mean(ga_finite) if ga_finite else float('inf'),
             'std': np.std(ga_finite) if len(ga_finite) > 1 else 0.0,
             'min': np.min(ga_finite) if ga_finite else float('inf'),
             'max': np.max(ga_finite) if ga_finite else float('inf'),
-            'success_rate': len(ga_finite) / num_runs * 100
+            'success_rate': ga_success_rate
         }
         
         pso_stats = {
@@ -189,7 +207,7 @@ def run_final_standard_experiment():
             'std': np.std(pso_finite) if len(pso_finite) > 1 else 0.0,
             'min': np.min(pso_finite) if pso_finite else float('inf'),
             'max': np.max(pso_finite) if pso_finite else float('inf'),
-            'success_rate': len(pso_finite) / num_runs * 100
+            'success_rate': pso_success_rate
         }
         
         # Store results
@@ -198,7 +216,7 @@ def run_final_standard_experiment():
             'Category': func_info['type'],
             'Dimension': dimension,
             'Bounds': str(bounds),
-            'Expected_Min': func_info['global_minimum'],
+            'Expected_Min': func_info.get('global_minimum', 'Unknown'),
             'GA_Mean': ga_stats['mean'],
             'GA_Std': ga_stats['std'],
             'GA_Min': ga_stats['min'],
@@ -213,8 +231,8 @@ def run_final_standard_experiment():
         
         # Print summary
         print(f"\n📊 Results for {func_name}:")
-        print(f"GA:  Mean={ga_stats['mean']:.6f}, Std={ga_stats['std']:.6f}, Success={ga_stats['success_rate']:.1f}%")
-        print(f"PSO: Mean={pso_stats['mean']:.6f}, Std={pso_stats['std']:.6f}, Success={pso_stats['success_rate']:.1f}%")
+        print(f"GA:  Mean={ga_stats['mean']:.6f}, Std={ga_stats['std']:.6f}, Success={ga_stats['success_rate']:.1f}% ({len(ga_finite)}/{num_runs} finite)")
+        print(f"PSO: Mean={pso_stats['mean']:.6f}, Std={pso_stats['std']:.6f}, Success={pso_stats['success_rate']:.1f}% ({len(pso_finite)}/{num_runs} finite)")
         print("=" * 60)
     
     # Create results DataFrame

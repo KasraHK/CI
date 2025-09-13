@@ -99,7 +99,7 @@ def main():
     # Example: Run specific algorithm on specific function
     # from genetic_algorithm_optimization.sequential.algorithms import ModularGeneticAlgorithm
     # from genetic_algorithm_optimization.benchmarks.functions import get_function_by_name
-    # 
+    #  
     # # Get a specific function
     # sphere_func = get_function_by_name("Sphere")
     # 

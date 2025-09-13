@@ -389,13 +389,13 @@ def shubert_4(x):
 def shubert(x):
     """Shubert Function"""
     d = len(x)
-    prod = 1
+    result = 0
     for i in range(d):
         sum_inner = 0
         for j in range(1, 6):
             sum_inner += j * np.cos((j + 1) * x[i] + j)
-        prod *= sum_inner
-    return prod
+        result += sum_inner
+    return result
 
 def styblinski_tang(x):
     """Styblinski-Tang Function"""
@@ -428,14 +428,14 @@ BENCHMARK_FUNCTIONS = {
     # --- Unimodal (27) ---
     "ackley_n2":          {"func": ackley_n2, "bounds": (-32, 32), "type": "unimodal", "dim_type": 2},
     "bohachevsky_n1":     {"func": bohachevsky_n1, "bounds": (-100, 100), "type": "unimodal", "dim_type": 2},
-    "booth":              {"func": booth, "bounds": (-10, 10), "type": "unimodal", "dim_type": 2},
-    "brent":              {"func": brent, "bounds": (-10, 10), "type": "unimodal", "dim_type": 2},
+    "booth":              {"func": booth, "bounds": (-10, 10), "type": "unimodal", "dim_type": 2, "global_minimum": 0.0},
+    "brent":              {"func": brent, "bounds": (-10, 10), "type": "unimodal", "dim_type": 2, "global_minimum": 0.0},
     "brown":              {"func": brown, "bounds": (-1, 4), "type": "unimodal", "dim_type": "n-dim"},
-    "drop_wave":          {"func": drop_wave, "bounds": (-5.12, 5.12), "type": "unimodal", "dim_type": 2},
+    "drop_wave":          {"func": drop_wave, "bounds": (-5.12, 5.12), "type": "unimodal", "dim_type": 2, "global_minimum": -1.0},
     "exponential":        {"func": exponential, "bounds": (-1, 1), "type": "unimodal", "dim_type": "n-dim"},
-    "griewank":           {"func": griewank, "bounds": (-100, 100), "type": "unimodal", "dim_type": "n-dim"}, # Moved to unimodal as per list
+    "griewank":           {"func": griewank, "bounds": (-100, 100), "type": "unimodal", "dim_type": "n-dim", "global_minimum": 0.0}, # Moved to unimodal as per list
     "leon":               {"func": leon, "bounds": (-1.2, 1.2), "type": "unimodal", "dim_type": 2},
-    "matyas":             {"func": matyas, "bounds": (-10, 10), "type": "unimodal", "dim_type": 2},
+    "matyas":             {"func": matyas, "bounds": (-10, 10), "type": "unimodal", "dim_type": 2, "global_minimum": 0.0},
     "powell_sum":         {"func": powell_sum, "bounds": (-1, 1), "type": "unimodal", "dim_type": "n-dim"},
     "ridge":              {"func": ridge, "bounds": (-5, 5), "type": "unimodal", "dim_type": "n-dim"},
     "schaffer_n1":        {"func": schaffer_n1, "bounds": (-100, 100), "type": "unimodal", "dim_type": 2},
@@ -446,7 +446,7 @@ BENCHMARK_FUNCTIONS = {
     "schwefel_2_21":      {"func": schwefel_2_21, "bounds": (-100, 100), "type": "unimodal", "dim_type": "n-dim"},
     "schwefel_2_22":      {"func": schwefel_2_22, "bounds": (-10, 10), "type": "unimodal", "dim_type": "n-dim"},
     "schwefel_2_23":      {"func": schwefel_2_23, "bounds": (-10, 10), "type": "unimodal", "dim_type": "n-dim"},
-    "sphere":             {"func": sphere, "bounds": (-5.12, 5.12), "type": "unimodal", "dim_type": "n-dim"},
+    "sphere":             {"func": sphere, "bounds": (-5.12, 5.12), "type": "unimodal", "dim_type": "n-dim", "global_minimum": 0.0},
     "sum_squares":        {"func": sum_squares, "bounds": (-10, 10), "type": "unimodal", "dim_type": "n-dim"},
     "three_hump_camel":   {"func": three_hump_camel, "bounds": (-5, 5), "type": "unimodal", "dim_type": 2},
     "trid":               {"func": trid, "bounds": (-30**2, 30**2), "type": "unimodal", "dim_type": "n-dim"},
@@ -454,32 +454,32 @@ BENCHMARK_FUNCTIONS = {
     "zakharov":           {"func": zakharov, "bounds": (-5, 10), "type": "unimodal", "dim_type": "n-dim"},
 
     # --- Multimodal (41) ---
-    "ackley":             {"func": ackley, "bounds": (-32.768, 32.768), "type": "multimodal", "dim_type": "n-dim"},
+    "ackley":             {"func": ackley, "bounds": (-32.768, 32.768), "type": "multimodal", "dim_type": "n-dim", "global_minimum": 0.0},
     "ackley_n3":          {"func": ackley_n3, "bounds": (-32, 32), "type": "multimodal", "dim_type": 2},
     "ackley_n4":          {"func": ackley_n4, "bounds": (-35, 35), "type": "multimodal", "dim_type": "n-dim"},
-    "adjiman":            {"func": adjiman, "bounds": ((-1, 2), (-1, 1)), "type": "multimodal", "dim_type": 2}, # Asymmetric
+    "adjiman":            {"func": adjiman, "bounds": ((-1, 2), (-1, 1)), "type": "multimodal", "dim_type": 2, "global_minimum": -2.02180678}, # Asymmetric
     "alpine_n1":          {"func": alpine_n1, "bounds": (-10, 10), "type": "multimodal", "dim_type": "n-dim"},
     "alpine_n2":          {"func": alpine_n2, "bounds": (0, 10), "type": "multimodal", "dim_type": "n-dim"},
     "bartels_conn":       {"func": bartels_conn, "bounds": (-500, 500), "type": "multimodal", "dim_type": 2},
-    "beale":              {"func": beale, "bounds": (-4.5, 4.5), "type": "multimodal", "dim_type": 2},
+    "beale":              {"func": beale, "bounds": (-4.5, 4.5), "type": "multimodal", "dim_type": 2, "global_minimum": 0.0},
     "bird":               {"func": bird, "bounds": (-2*np.pi, 2*np.pi), "type": "multimodal", "dim_type": 2},
     "bohachevsky_n2":     {"func": bohachevsky_n2, "bounds": (-100, 100), "type": "multimodal", "dim_type": 2},
-    "bukin_n6":           {"func": bukin_n6, "bounds": ((-15, -5), (-3, 3)), "type": "multimodal", "dim_type": 2}, # Asymmetric
+    "bukin_n6":           {"func": bukin_n6, "bounds": ((-15, -5), (-3, 3)), "type": "multimodal", "dim_type": 2, "global_minimum": 0.0}, # Asymmetric
     "carrom_table":       {"func": carrom_table, "bounds": (-10, 10), "type": "multimodal", "dim_type": 2},
     "cross_in_tray":      {"func": cross_in_tray, "bounds": (-10, 10), "type": "multimodal", "dim_type": 2},
     "deckkers_aarts":     {"func": deckkers_aarts, "bounds": (-20, 20), "type": "multimodal", "dim_type": 2},
-    "easom":              {"func": easom, "bounds": (-100, 100), "type": "multimodal", "dim_type": 2},
+    "easom":              {"func": easom, "bounds": (-100, 100), "type": "multimodal", "dim_type": 2, "global_minimum": -1.0},
     "egg_crate":          {"func": egg_crate, "bounds": (-5, 5), "type": "multimodal", "dim_type": 2},
     "elattar_vidyasagar_dutta": {"func": elattar_vidyasagar_dutta, "bounds": (-500, 500), "type": "multimodal", "dim_type": 2},
     "forrester":          {"func": forrester, "bounds": (0, 1), "type": "multimodal", "dim_type": 1},
-    "goldstein_price":    {"func": goldstein_price, "bounds": (-2, 2), "type": "multimodal", "dim_type": 2},
+    "goldstein_price":    {"func": goldstein_price, "bounds": (-2, 2), "type": "multimodal", "dim_type": 2, "global_minimum": 3.0},
     "gramacy_lee":        {"func": gramacy_lee, "bounds": (0.5, 2.5), "type": "multimodal", "dim_type": 1},
     "happy_cat":          {"func": happy_cat, "bounds": (-2, 2), "type": "multimodal", "dim_type": "n-dim"},
-    "himmelblau":         {"func": himmelblau, "bounds": (-5, 5), "type": "multimodal", "dim_type": 2},
+    "himmelblau":         {"func": himmelblau, "bounds": (-5, 5), "type": "multimodal", "dim_type": 2, "global_minimum": 0.0},
     "holder_table":       {"func": holder_table, "bounds": (-10, 10), "type": "multimodal", "dim_type": 2},
     "keane":              {"func": keane, "bounds": (0, 10), "type": "multimodal", "dim_type": 2},
     "levi_n13":           {"func": levi_n13, "bounds": (-10, 10), "type": "multimodal", "dim_type": 2},
-    "mccormick":          {"func": mccormick, "bounds": ((-1.5, 4), (-3, 4)), "type": "multimodal", "dim_type": 2}, # Asymmetric
+    "mccormick":          {"func": mccormick, "bounds": ((-1.5, 4), (-3, 4)), "type": "multimodal", "dim_type": 2, "global_minimum": -1.9132229549810367}, # Asymmetric
     "periodic":           {"func": periodic, "bounds": (-10, 10), "type": "multimodal", "dim_type": "n-dim"},
     "qing":               {"func": qing, "bounds": (-500, 500), "type": "multimodal", "dim_type": "n-dim"},
     "quartic":            {"func": quartic, "bounds": (-1.28, 1.28), "type": "multimodal", "dim_type": "n-dim"},
@@ -489,9 +489,9 @@ BENCHMARK_FUNCTIONS = {
     "schwefel":           {"func": schwefel, "bounds": (-500, 500), "type": "multimodal", "dim_type": "n-dim"},
     "shubert_3":          {"func": shubert_3, "bounds": (-10, 10), "type": "multimodal", "dim_type": "n-dim"},
     "shubert_4":          {"func": shubert_4, "bounds": (-10, 10), "type": "multimodal", "dim_type": "n-dim"},
-    "shubert":            {"func": shubert, "bounds": (-10, 10), "type": "multimodal", "dim_type": "n-dim"},
+    "shubert":            {"func": shubert, "bounds": (-10, 10), "type": "multimodal", "dim_type": "n-dim", "global_minimum": -186.7309},
     "styblinski_tang":    {"func": styblinski_tang, "bounds": (-5, 5), "type": "multimodal", "dim_type": "n-dim"},
-    "wolfe":              {"func": wolfe, "bounds": (0, 2), "type": "multimodal", "dim_type": 3},
+    "wolfe":              {"func": wolfe, "bounds": (0, 2), "type": "multimodal", "dim_type": 3, "global_minimum": 0.0},
     "xinsheyang":         {"func": xinsheyang, "bounds": (-2*np.pi, 2*np.pi), "type": "multimodal", "dim_type": "n-dim"},
     "xinsheyang_n2":      {"func": xinsheyang_n2, "bounds": (-2*np.pi, 2*np.pi), "type": "multimodal", "dim_type": "n-dim"},
     "xinsheyang_n4":      {"func": xinsheyang_n4, "bounds": (-10, 10), "type": "multimodal", "dim_type": "n-dim"},
