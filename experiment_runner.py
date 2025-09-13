@@ -97,10 +97,10 @@ class BenchmarkExperimentRunner:
             
             results.append({
                 "best_score": best_scores[-1],
-                "best_position": best_position.tolist(),
-                "convergence": best_scores,
-                "run_time": end_time - start_time,
-                "fitness_calls": optimizer.fitness_evaluations
+                # "best_position": best_position.tolist(),
+                # "convergence": best_scores,
+                # "run_time": end_time - start_time,
+                # "fitness_calls": optimizer.fitness_evaluations
             })
             
             run_times.append(end_time - start_time)

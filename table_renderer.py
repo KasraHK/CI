@@ -9,6 +9,7 @@ import numpy as np
 from pathlib import Path
 from experiment_runner import BenchmarkExperimentRunner
 from benchmarks.functions import BenchmarkSuite
+from config import F_MIN_INFO
 
 class TableRenderer:
     def __init__(self, results_dir="results"):
@@ -118,14 +119,78 @@ class TableRenderer:
             else:
                 range_str = "N/A"
             
+            # Get Fmin value from F_MIN_INFO, with fallback to function's min_value
+            fmin_value = self._get_fmin_value(func_name)
+            
             info_data.append({
                 'Function': func_name,
                 'Range': range_str,
                 'Dim': func_info['dim'],
-                'Fmin': func_info['min_value']
+                'Fmin': fmin_value
             })
         
         return pd.DataFrame(info_data)
+    
+    def _get_fmin_value(self, func_name):
+        """Get the minimum value for a function from F_MIN_INFO
+        
+        Args:
+            func_name (str): Function name from benchmark
+            
+        Returns:
+            float: Minimum value for the function
+        """
+        # Create mapping from benchmark function names to F_MIN_INFO keys
+        name_mapping = {
+            'ackleyn2': 'ackley_n2',
+            'ackleyn3': 'ackley_n3', 
+            'ackleyn4': 'ackley_n4',
+            'alpine1': 'alpine_n1',
+            'alpine2': 'alpine_n2',
+            'bartelsconn': 'bartels_conn',
+            'bohachevskyn1': 'bohachevsky_n1',
+            'bohachevskyn2': 'bohachevsky_n2',
+            'bukinn6': 'bukin_n6',
+            'carromtable': 'carrom_table',
+            'crossintray': 'cross_in_tray',
+            'deckersaarts': 'deckers_aarts',
+            'eggcrate': 'egg_crate',
+            'elattarvidyasagardutta': 'el_attar_vidyasagar_dutta',
+            'goldsteinprice': 'goldstein_price',
+            'gramacylee': 'gramacy_lee',
+            'happycat': 'happy_cat',
+            'holdertable': 'holder_table',
+            'levin13': 'levi_n13',
+            'powellsum': 'powell_sum',
+            'schaffern1': 'schaffer_n1',
+            'schaffern2': 'schaffer_n2',
+            'schaffern3': 'schaffer_n3',
+            'schaffern4': 'schaffer_n4',
+            'schwefel220': 'schwefel_2_20',
+            'schwefel221': 'schwefel_2_21',
+            'schwefel222': 'schwefel_2_22',
+            'schwefel223': 'schwefel_2_23',
+            'shubert3': 'shubert_3',
+            'shubertn4': 'shubert_n4',
+            'sumsquares': 'sum_squares',
+            'styblinskitank': 'styblinski_tang',
+            'threehumpcamel': 'three_hump_camel',
+            'xinsheyang': 'xin_she_yang',
+            'xinsheyangn2': 'xin_she_yang_n2',
+            'xinsheyangn3': 'xin_she_yang_n3',
+            'xinsheyangn4': 'xin_she_yang_n4'
+        }
+        
+        # Get the mapped name or use original name
+        mapped_name = name_mapping.get(func_name, func_name)
+        
+        # Look up in F_MIN_INFO
+        if mapped_name in F_MIN_INFO:
+            return F_MIN_INFO[mapped_name][0]  # Return the first element (min value)
+        else:
+            # Fallback to function's min_value if not found in F_MIN_INFO
+            func_info = self.benchmark.get_function(func_name)
+            return func_info['min_value']
     
     def format_comparison_table(self, df):
         """Format the comparison table for display

@@ -7,7 +7,7 @@ Modify these parameters to adjust experiment settings
 # Experiment Parameters
 EXPERIMENT_CONFIG = {
     # Number of runs per function-algorithm combination
-    "runs_per_experiment": 20,
+    "runs_per_experiment": 5,
     
     # Default dimension for functions that support any dimension
     "default_dimension": 10,
