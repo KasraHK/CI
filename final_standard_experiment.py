@@ -210,13 +210,19 @@ def run_final_standard_experiment():
             'success_rate': pso_success_rate
         }
         
+        # Calculate expected minimum for dimension-dependent functions
+        expected_min = func_info.get('global_minimum', 'Unknown')
+        if expected_min == 'dimension_dependent' and func_name == 'trid':
+            # Trid function: -n*(n+4)*(n-1)/6
+            expected_min = -dimension * (dimension + 4) * (dimension - 1) / 6
+        
         # Store results
         results.append({
             'Function': func_name,
             'Category': func_info['type'],
             'Dimension': dimension,
             'Bounds': str(bounds),
-            'Expected_Min': func_info.get('global_minimum', 'Unknown'),
+            'Expected_Min': expected_min,
             'GA_Mean': ga_stats['mean'],
             'GA_Std': ga_stats['std'],
             'GA_Min': ga_stats['min'],
