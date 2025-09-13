@@ -7,7 +7,7 @@ Modify these parameters to adjust experiment settings
 # Experiment Parameters
 EXPERIMENT_CONFIG = {
     # Number of runs per function-algorithm combination
-    "runs_per_experiment": 5,
+    "runs_per_experiment": 20,
     
     # Default dimension for functions that support any dimension
     "default_dimension": 10,
@@ -22,8 +22,8 @@ EXPERIMENT_CONFIG = {
 # Genetic Algorithm Parameters
 GA_CONFIG = {
     "population_size": 50,
-    "mutation_rate": 0.1,
-    "crossover_rate": 0.8,
+    "mutation_rate": 0.01,
+    "crossover_rate": 0.75,
     "max_fitness_calls": 40000
 }
 
@@ -76,6 +76,81 @@ FUNCTION_LISTS = {
         'keane', 'leon', 'levin13', 'matyas', 'mccormick', 'periodic', 'qing', 'quartic',
         'rastrigin', 'rosenbrock', 'salomon', 'schwefel', 'shubert3', 'shubertn4', 'shubert',
         'styblinskitank', 'wolfe', 'xinsheyang', 'xinsheyangn2', 'xinsheyangn4', 'zakharov'
+    ],
+    "one_dimensional_functions": [
+        'forrester',
+        'gramacylee'
+    ],
+    "two_dimensional_functions": [
+        'ackleyn2',
+        'ackleyn3',
+        'adjiman',
+        'bartelsconn',
+        'beale',
+        'bird',
+        'bohachevskyn1',
+        'bohachevskyn2',
+        'booth',
+        'brent',
+        'bukinn6',
+        'carromtable',
+        'crossintray',
+        'deckersaarts',
+        'dropwave',
+        'easom',
+        'eggcrate',
+        'elattarvidyasagardutta',
+        'goldsteinprice',
+        'himmelblau',
+        'holdertable',
+        'keane',
+        'leon',
+        'levin13',
+        'matyas',
+        'mccormick',
+        'schaffern1',
+        'schaffern2',
+        'schaffern3',
+        'schaffern4',
+        'threehumpcamel'
+    ],
+    "three_dimensional_functions": [
+        'wolfe'
+    ],
+    "n_dimensional_functions": [
+        'ackley',
+        'ackleyn4',
+        'alpine1',
+        'alpine2',
+        'brown',
+        'exponential',
+        'griewank',
+        'happycat',
+        'periodic',
+        'powellsum',
+        'qing',
+        'quartic',
+        'rastrigin',
+        'ridge',
+        'rosenbrock',
+        'salomon',
+        'schwefel220',
+        'schwefel221',
+        'schwefel222',
+        'schwefel223',
+        'schwefel',
+        'shubert3',
+        'shubertn4',
+        'shubert',
+        'sphere',
+        'styblinskitank',
+        'sumsquares',
+        'trid',
+        'xinsheyang',
+        'xinsheyangn2',
+        'xinsheyangn3',
+        'xinsheyangn4',
+        'zakharov'
     ]
 }
 

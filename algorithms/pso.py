@@ -7,7 +7,7 @@ class ParticleSwarmOptimization:
                  dim: int,
                  bounds: np.ndarray,
                  num_particles: int = 50,
-                 max_fitness_calls: int = 10,
+                 max_fitness_calls: int = 40000,
                  w: float = 0.729,  # inertia weight
                  c1: float = 1.49445,  # cognitive coefficient
                  c2: float = 1.49445,  # social coefficient
@@ -134,11 +134,11 @@ class ParticleSwarmOptimization:
             
             self.best_fitness_history.append(self.global_best_score)
             
-            # Early stopping if converged
-            if len(self.best_fitness_history) > 50:
-                recent_improvement = self.best_fitness_history[-50] - self.best_fitness_history[-1]
-                if recent_improvement < 1e-10:
-                    break
+            # Early stopping if converged (disabled to use full fitness budget)
+            # if len(self.best_fitness_history) > 50:
+            #     recent_improvement = self.best_fitness_history[-50] - self.best_fitness_history[-1]
+            #     if recent_improvement < 1e-10:
+            #         break
             
             # Break if we've reached the maximum fitness evaluations
             if self.fitness_evaluations >= self.max_fitness_calls:

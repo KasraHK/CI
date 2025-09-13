@@ -432,20 +432,20 @@ class SimpleWebVisualizer:
     def generate_all_visualizations(self):
         """Generate all web visualizations"""
         
-        print("🌐 Loading experiment results...")
+        # print("🌐 Loading experiment results...")
         results = self.load_latest_results()
         
-        print("📊 Creating comparison dataframes...")
+        # print("📊 Creating comparison dataframes...")
         unimodal_comparison = self.create_comparison_dataframe(
             results['unimodal_results']['results'], 'Unimodal')
         multimodal_comparison = self.create_comparison_dataframe(
             results['multimodal_results']['results'], 'Multimodal')
         
-        print("📋 Creating function info dataframes...")
+        # print("📋 Creating function info dataframes...")
         unimodal_info = self.create_function_info_dataframe(self.runner.unimodal_functions)
         multimodal_info = self.create_function_info_dataframe(self.runner.multimodal_functions)
         
-        print("🎨 Generating HTML tables...")
+        # print("🎨 Generating HTML tables...")
         files = {}
         files['unimodal_comparison'] = self.create_comparison_table_html(
             unimodal_comparison, "Unimodal Functions - GA vs PSO Comparison", "unimodal_comparison.html")
@@ -456,11 +456,11 @@ class SimpleWebVisualizer:
         files['multimodal_info'] = self.create_function_info_html(
             multimodal_info, "Multimodal Functions - Function Information", "multimodal_function_info.html")
         
-        print("🏠 Creating dashboard...")
+        # print("🏠 Creating dashboard...")
         dashboard_file = self.create_dashboard_html(files)
         
-        print("\n✅ All web visualizations generated successfully!")
-        print("📁 Files saved in 'results/web/':")
+        # print("\n✅ All web visualizations generated successfully!")
+        # print("📁 Files saved in 'results/web/':")
         for name, file_path in files.items():
             print(f"   - {name}: {file_path.name}")
         print(f"   - dashboard: {dashboard_file.name}")
@@ -471,7 +471,7 @@ class SimpleWebVisualizer:
         """Open the dashboard in the default web browser"""
         dashboard_file, _ = self.generate_all_visualizations()
         
-        print(f"\n🌐 Opening dashboard in browser...")
+        # print(f"\n🌐 Opening dashboard in browser...")
         webbrowser.open(f"file://{dashboard_file.absolute()}")
         
         return dashboard_file
@@ -479,11 +479,11 @@ class SimpleWebVisualizer:
 if __name__ == "__main__":
     visualizer = SimpleWebVisualizer()
     
-    print("🎯 Simple Web Visualization System")
+    # print("🎯 Simple Web Visualization System")
     print("=" * 40)
     
     # Generate and open dashboard
     dashboard_file = visualizer.open_dashboard()
     
     print(f"\n🎉 Dashboard opened: {dashboard_file}")
-    print("📁 All visualization files are in 'results/web/' folder")
+    # print("📁 All visualization files are in 'results/web/' folder")

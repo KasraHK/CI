@@ -12,7 +12,7 @@ class BenchmarkSuite:
             name for name in dir(benchmarkfcns) 
             if not name.startswith('_') and callable(getattr(benchmarkfcns, name))
         ]
-        print(all_function_names)
+        # print(all_function_names)
         
         # Register all functions
         for fname in all_function_names:
@@ -24,9 +24,8 @@ class BenchmarkSuite:
                 dim = getattr(func, 'dim', 30)
                 min_value = getattr(func, 'min_value', 0.0)
                 
-                # Determine if function is unimodal based on user-specified lists
+                # Determine if function is unimodal based on user specifications
                 is_unimodal = fname in [
-                    # Unimodal functions from user specification
                     'ackleyn2', 'bohachevskyn1', 'booth', 'brent', 'brown', 'dropwave', 'exponential',
                     'powellsum', 'ridge', 'schaffern1', 'schaffern2', 'schaffern3', 'schaffern4',
                     'schwefel220', 'schwefel221', 'schwefel222', 'schwefel223', 'sphere', 'sumsquares',
@@ -77,15 +76,13 @@ class BenchmarkSuite:
     def get_function_dimension_requirements(self):
         """Get dimension requirements for functions that have restrictions"""
         return {
-            # Functions that only work with specific dimensions (these are truly fixed-dimension)
-            'forrester': 1,      # Only defined on 1D space
-            'gramacylee': 1,     # Only defined on 1D space
-            'wolfe': 3,          # Only defined on 3D space
+            # 1D functions
+            'forrester': 1,
+            'gramacylee': 1,
             
-            # Functions that only work with 2D input (these are truly 2D-only)
+            # 2D functions
             'ackleyn2': 2,
             'ackleyn3': 2,
-            'ackleyn4': 2,
             'adjiman': 2,
             'bartelsconn': 2,
             'beale': 2,
@@ -94,16 +91,15 @@ class BenchmarkSuite:
             'bohachevskyn2': 2,
             'booth': 2,
             'brent': 2,
-            'brown': 2,
             'bukinn6': 2,
             'carromtable': 2,
             'crossintray': 2,
+            'deckersaarts': 2,
             'dropwave': 2,
             'easom': 2,
             'eggcrate': 2,
-            'exponential': 2,
+            'elattarvidyasagardutta': 2,
             'goldsteinprice': 2,
-            'happycat': 2,
             'himmelblau': 2,
             'holdertable': 2,
             'keane': 2,
@@ -111,25 +107,16 @@ class BenchmarkSuite:
             'levin13': 2,
             'matyas': 2,
             'mccormick': 2,
-            'periodic': 2,
-            'powellsum': 2,
-            'qing': 2,
-            'quartic': 2,
-            'ridge': 2,
-            'salomon': 2,
             'schaffern1': 2,
             'schaffern2': 2,
             'schaffern3': 2,
             'schaffern4': 2,
-            'shubert': 2,
-            'shubertn4': 2,
-            'styblinskitank': 2,
-            'sumsquares': 2,
             'threehumpcamel': 2,
-            'trid': 2,
-            'xinsheyangn2': 2,
-            'xinsheyangn3': 2,
-            'xinsheyangn4': 2,
+            
+            # 3D functions
+            'wolfe': 3,
+            
+            # Note: Functions not listed here are n-dimensional (can work with any dimension)
         }
     
     def get_required_dimension(self, name):

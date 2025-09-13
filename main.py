@@ -15,16 +15,16 @@ def main():
 
     
     # unimodal_table, multimodal_table = runner.run_all_experiments()
-    print(runner.run_all_experiments())
+    print(runner.run_single_experiment('ackleyn4', 'ga'))
 
     
-    # # Generate formatted tables
-    renderer = TableRenderer(results_dir=EXPERIMENT_CONFIG["results_directory"])
-    renderer.generate_all_tables()
+    # # # Generate formatted tables
+    # renderer = TableRenderer(results_dir=EXPERIMENT_CONFIG["results_directory"])
+    # renderer.generate_all_tables()
     
-    # Generate web visualizations
-    web_visualizer = SimpleWebVisualizer(results_dir=EXPERIMENT_CONFIG["results_directory"])
-    dashboard_file = web_visualizer.open_dashboard()
+    # # Generate web visualizations
+    # web_visualizer = SimpleWebVisualizer(results_dir=EXPERIMENT_CONFIG["results_directory"])
+    # dashboard_file = web_visualizer.open_dashboard()
 
 if __name__ == "__main__":
     main()

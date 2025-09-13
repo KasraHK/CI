@@ -31,15 +31,17 @@ class BenchmarkExperimentRunner:
         
         # Load functions from configuration
         self.all_benchmark_functions = FUNCTION_LISTS["all_functions"]
+        self.unimodal_functions = FUNCTION_LISTS["unimodal_functions"]
+        self.multimodal_functions = FUNCTION_LISTS["multimodal_functions"]
         
         # Filter to only available functions
         self.available_functions = [f for f in self.all_benchmark_functions 
                                   if f in self.benchmark.functions]
         
-        # Use predefined categorization from config
-        self.unimodal_functions = [f for f in FUNCTION_LISTS["unimodal_functions"] 
+        # Filter unimodal and multimodal functions to only available ones
+        self.unimodal_functions = [f for f in self.unimodal_functions 
                                  if f in self.benchmark.functions]
-        self.multimodal_functions = [f for f in FUNCTION_LISTS["multimodal_functions"] 
+        self.multimodal_functions = [f for f in self.multimodal_functions 
                                    if f in self.benchmark.functions]
         
     def run_single_experiment(self, func_name, algorithm, runs=5, dim=10):
@@ -47,13 +49,15 @@ class BenchmarkExperimentRunner:
         func_info = self.benchmark.get_function(func_name)
         
         # Check if the function supports the requested dimension
-        if not self.benchmark.is_dimension_compatible(func_name, dim):
-            required_dim = self.benchmark.get_required_dimension(func_name)
-            if required_dim is not None:
+        required_dim = self.benchmark.get_required_dimension(func_name)
+        if required_dim is not None:
+            # Function has specific dimension requirement
+            if dim != required_dim:
                 print(f"⚠️  {func_name} only supports {required_dim}D input, adjusting dimension from {dim}D to {required_dim}D")
                 dim = required_dim
-            else:
-                print(f"⚠️  {func_name} may not support {dim}D input, proceeding anyway...")
+        else:
+            # Function supports any dimension, use the requested dimension
+            pass
         
         # Get bounds for the adjusted dimension
         bounds = self.benchmark.get_reasonable_bounds(func_name, dim)
@@ -106,9 +110,6 @@ class BenchmarkExperimentRunner:
     
     def run_category_experiments(self, functions, category_name, algorithms=["ga", "pso"], runs=10, dim=10):
         """Run experiments for a specific category of functions"""
-        print(f"\n{'='*80}")
-        print(f"🧪 Running experiments for {category_name} functions")
-        print(f"{'='*80}")
         
         results = {}
         execution_times = {}
@@ -152,6 +153,11 @@ class BenchmarkExperimentRunner:
                     times = [run["run_time"] for run in results[func_name][algorithm]]
                     fitness_evals = [run["fitness_calls"] for run in results[func_name][algorithm]]
                     
+                    # Get the actual dimension used in the experiment
+                    actual_dim = self.benchmark.get_required_dimension(func_name)
+                    if actual_dim is None:
+                        actual_dim = func_info['dim']  # Use default dimension for n-dimensional functions
+                    
                     table_data.append({
                         "Function": func_name,
                         "Algorithm": algorithm.upper(),
@@ -160,7 +166,7 @@ class BenchmarkExperimentRunner:
                         "Std Score": f"{np.std(scores):.{TABLE_CONFIG['decimal_places']}f}",
                         "Mean Time (s)": f"{np.mean(times):.{TABLE_CONFIG['time_decimal_places']}f}",
                         "Mean Fitness Calls": f"{np.mean(fitness_evals):.0f}",
-                        "Dimension": func_info['dim'],
+                        "Dimension": actual_dim,
                         "Min Value": func_info['min_value']
                     })
         
