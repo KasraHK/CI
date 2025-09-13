@@ -189,9 +189,9 @@ def run_final_standard_experiment():
         # For debugging: also calculate "quality" success rate
         global_min = func_info.get('global_minimum')
         if global_min is not None and global_min != 'Unknown':
-            tolerance = abs(global_min) * 0.1  # 10% tolerance
-            ga_quality_success = len([f for f in ga_finite if abs(f - global_min) <= tolerance]) / num_runs * 100
-            pso_quality_success = len([f for f in pso_finite if abs(f - global_min) <= tolerance]) / num_runs * 100
+            tolerance = abs(int(global_min)) * 0.1  # 10% tolerance
+            ga_quality_success = len([f for f in ga_finite if abs(f - int(global_min)) <= tolerance]) / num_runs * 100
+            pso_quality_success = len([f for f in pso_finite if abs(f - int(global_min)) <= tolerance]) / num_runs * 100
             print(f"  Quality Success (within 10% of global min): GA={ga_quality_success:.1f}%, PSO={pso_quality_success:.1f}%")
         
         ga_stats = {
