@@ -14,7 +14,7 @@ def main():
     runner = BenchmarkExperimentRunner(results_dir=EXPERIMENT_CONFIG["results_directory"])
 
     
-    # unimodal_table, multimodal_table = runner.run_all_experiments()
+    # unimodal_table, multimodal_table = runner.run_all_experiments().
     print(runner.run_single_experiment('elattar', 'ga', runs=5))
 
     
