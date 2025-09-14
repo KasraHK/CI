@@ -22,7 +22,7 @@ EXPERIMENT_CONFIG = {
 # Genetic Algorithm Parameters
 GA_CONFIG = {
     "population_size": 50,
-    "mutation_rate": 0.01,
+    "mutation_rate": 0.2,
     "crossover_rate": 0.75,
     "max_fitness_calls": 40000
 }

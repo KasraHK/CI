@@ -15,7 +15,7 @@ def main():
 
     
     # unimodal_table, multimodal_table = runner.run_all_experiments()
-    print(runner.run_single_experiment('shubert', 'ga', runs=5))
+    print(runner.run_single_experiment('elattar', 'ga', runs=5))
 
     
     # # Generate formatted tables

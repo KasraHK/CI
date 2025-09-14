@@ -112,8 +112,8 @@ class TableRenderer:
                 
             func_info = self.benchmark.get_function(func_name)
             
-            # Get bounds and format as range
-            bounds = func_info['bounds']
+            # Get reasonable bounds and format as range
+            bounds = self.benchmark.get_reasonable_bounds(func_name, func_info['dim'])
             if len(bounds) > 0:
                 range_str = f"[{bounds[0][0]:.0f}, {bounds[0][1]:.0f}]"
             else:
